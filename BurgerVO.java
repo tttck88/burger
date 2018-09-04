@@ -2,12 +2,25 @@ package burger_project1;
 
 public class BurgerVO {
 	
-	private String bgName;
-	private String bgPrice;
 	
-	BurgerVO(String bgName, String bgPrice) {
+	private int bgId;
+	private String bgName;
+	private int bgPrice;
+	
+	BurgerVO() {
+	}
+	
+	BurgerVO(int bgId, String bgName, int bgPrice) {
 		this.bgName = bgName;
 		this.bgPrice = bgPrice;		
+	}
+	
+	public int getBgId() {
+		return bgId;
+	}
+
+	public void setBgId(int bgId) {
+		this.bgId = bgId;
 	}
 
 	public String getBgName() {
@@ -18,11 +31,11 @@ public class BurgerVO {
 		this.bgName = bgName;
 	}
 
-	public String getBgPrice() {
+	public int getBgPrice() {
 		return bgPrice;
 	}
 
-	public void setBgPrice(String bgPrice) {
+	public void setBgPrice(int bgPrice) {
 		this.bgPrice = bgPrice;
 	}
 
