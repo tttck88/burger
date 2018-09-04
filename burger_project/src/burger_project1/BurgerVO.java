@@ -6,6 +6,7 @@ public class BurgerVO {
 	private int bgId;
 	private String bgName;
 	private int bgPrice;
+	private int num;
 	
 	BurgerVO() {
 	}
@@ -29,6 +30,8 @@ public class BurgerVO {
 
 	public void setBgName(String bgName) {
 		this.bgName = bgName;
+		int i =0;
+		this.num=++i;
 	}
 
 	public int getBgPrice() {
@@ -37,6 +40,15 @@ public class BurgerVO {
 
 	public void setBgPrice(int bgPrice) {
 		this.bgPrice = bgPrice;
+	}
+	
+
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
 	}
 
 	@Override

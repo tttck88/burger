@@ -1,68 +1,74 @@
 package burger_project1;
 
+import java.util.ArrayList;
+
 public class CustomerVO {
 	
-	private String id;
-	private String password;
-	private String name;
-	private String address;
-	private String phone;
+	ArrayList<String> list = new ArrayList();
 	
-	public CustomerVO(String id, String password, String name, String address, String phone) {
-		this.id = id;
-		this.password = password;
-		this.name = name;
-		this.address = address;
-		this.phone = phone;
+	private String whereEat;
+	private String whatMenu;
+	private ArrayList whatBg;
+	private ArrayList whatDk;
+	private ArrayList whatDs;
+	private String whatSet;
+	private String whereCheck;
+	
+	public String getWhereEat() {
+		return whereEat;
 	}
-
-	public String getId() {
-		return id;
+	public void setWhereEat(String whereEat) {
+		this.whereEat = whereEat;
 	}
-
-	public void setId(String id) {
-		this.id = id;
+	public String getWhatMenu() {
+		return whatMenu;
 	}
-
-	public String getPassword() {
-		return password;
+	public void setWhatMenu(String whatMenu) {
+		this.whatMenu = whatMenu;
 	}
-
-	public void setPassword(String password) {
-		this.password = password;
+	public ArrayList getWhatBg() {
+		return whatBg;
 	}
-
-	public String getName() {
-		return name;
+	public void setWhatBg(String whatBg) {
+		list.add(whatBg);
+		for (String str : list) {
+			System.out.println(str);
+		}
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	public ArrayList getWhatDk() {
+		return whatDk;
 	}
-
-	public String getAddress() {
-		return address;
+	public void setWhatDk(String whatDk) {
+		list.add(whatDk);
 	}
-
-	public void setAddress(String address) {
-		this.address = address;
+	public ArrayList getWhatDs() {
+		return whatDs;
 	}
-
-	public String getPhone() {
-		return phone;
+	public void setWhatDs(String whatDs) {
+		list.add(whatDs);
 	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public String getWhatSet() {
+		return whatSet;
 	}
-
+	public void setWhatSet(String whatSet) {
+		this.whatSet = whatSet;
+	}
+	public String getWhereCheck() {
+		return whereCheck;
+	}
+	public void setWhereCheck(String whereCheck) {
+		this.whereCheck = whereCheck;
+	}
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", password=" + password + ", name=" + name + ", address=" + address + ", phone="
-				+ phone + "]";
+		return "CustomerVO [list=" + list + ", whereEat=" + whereEat + ", whatMenu=" + whatMenu + ", whatBg=" + whatBg
+				+ ", whatDk=" + whatDk + ", whatDs=" + whatDs + ", whatSet=" + whatSet + ", whereCheck=" + whereCheck
+				+ "]";
 	}
 	
 	
+	
+
 	
 	
 	
