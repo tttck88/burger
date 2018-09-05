@@ -17,6 +17,7 @@ public class CustomerVO {
 	private ArrayList whatSet;
 	private String whereCheck;
 	
+	
 	public String getWhereEat() {
 		return whereEat;
 	}
@@ -62,9 +63,14 @@ public class CustomerVO {
 	@Override
 	public String toString() {
 		return "CustomerVO [bgList=" + bgList + ", dkList=" + dkList + ", dsList=" + dsList + ", setList=" + setList
-				+ ", whereEat=" + whereEat + ", whatBg=" + whatBg + ", whatDk=" + whatDk + ", whatDs=" + whatDs
-				+ ", whatSet=" + whatSet + ", whereCheck=" + whereCheck + "]";
+				+ ", whereEat=" + whereEat + ", whereCheck=" + whereCheck + "]";
 	}
+
+	
+	
+
+	
+	
 	
 	
 	

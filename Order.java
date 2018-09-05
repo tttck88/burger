@@ -1,9 +1,45 @@
 package burger_project1;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import common_util.JDBC_Close;
+
 public class Order {
+	
+	private static final String DRIVER = "oracle.jdbc.OracleDriver"; 
+	private static final String URL = "jdbc:oracle:thin:@203.236.209.174:1521:xe"; 
+	private static final String USER = "burger"; 
+	private static final String PASSWORD = "burger"; 
+	
+	private Connection conn;
+	private PreparedStatement pstmt;
+	private ResultSet rs;
+	
+	//static 초기화 구문
+	static {
+		try {
+			Class.forName(DRIVER);
+			System.out.println(">> 오라클 JDBC 드라이버 로딩 성공!!");
+		} catch (ClassNotFoundException e) {
+			System.out.println("[예외발생] 드라이버 로딩 실패!!!");
+		}
+	}
+	
+	private Connection getConnection() {
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+		} catch (SQLException e) {
+			System.out.println("[예외발생] DB연결 실패!!!");
+		}
+		return conn;
+	}
 	
 		Scanner choice = new Scanner(System.in);
 		int pick;
@@ -73,26 +109,77 @@ public class Order {
 			}
 		}
 		
-		//버거 선택시
+		//버거 메뉴
 		public void whatBg() {
-			System.out.println("무슨버거?");
-			System.out.println("1.치즈버거 2.더블치즈버거");
-
-			pick = choice.nextInt();
-			choice.nextLine();
+			ArrayList<BurgerVO> list = null;
 			
-			//버거선택if
-			if(pick == 1) {	
-				cvo.setWhatBg("치즈버거");
-				//장바구니에 저장
-			} else if (pick == 2) {
-				cvo.setWhatBg("더블치즈버거");
-				//장바구니에 저장
-			} else {
-				System.out.println("다시 입력해주세요");
-				whatBg();
+			try {
+				conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				
+				StringBuilder sb = new StringBuilder();
+				sb.append("SELECT BURGERID, BURGERNAME, PRICE ");
+				sb.append("  FROM BURGER ");
+				sb.append(" ORDER BY BURGERID ");
+				pstmt = conn.prepareStatement(sb.toString());
+				
+				rs = pstmt.executeQuery();
+				
+				list = new ArrayList<BurgerVO>();
+				while (rs.next()) {
+					list.add(new BurgerVO(rs.getInt("burgerid"),
+										  rs.getString("burgername"),
+										  rs.getInt("price")));
+					
+					if (list.size() < 1) {
+						list = null;
+					}
+				}
+				for(BurgerVO bvo : list) {
+					System.out.println(bvo);
+				}				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				JDBC_Close.closeConnStmtRs(conn, pstmt, rs);
+				pickBurger();
 			}
-			whatBg2();
+		}
+			
+		//버거 아이디로 검색
+		public void pickBurger () {
+				System.out.println("무슨버거?");
+				BurgerVO bvo = null;			
+			try {			
+				conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				
+				String sql = "";
+				sql += "SELECT BURGERID, BURGERNAME, PRICE ";
+				sql += "  FROM BURGER ";
+				sql += " WHERE BURGERID = ?";
+				pstmt = conn.prepareStatement(sql);
+				
+				pick = choice.nextInt();
+    			choice.nextLine();
+				
+				pstmt.setInt(1, pick);
+				
+				rs = pstmt.executeQuery();
+				
+				if (rs.next()) {
+					bvo = new BurgerVO(
+					rs.getInt(1)
+				   ,rs.getString(2)
+				   ,rs.getInt(3)
+					);
+					cvo.setWhatBg(bvo.getBgName());
+				} else {
+					System.out.println("데이터 없음!");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				JDBC_Close.closeConnStmtRs(conn, pstmt, rs);
+			}  whatMenu();			
 		}
 			
 			public void whatBg2() {
@@ -137,45 +224,147 @@ public class Order {
 		}
 		//음료선택시
 		public void whatDk() {
-			System.out.println("무슨음료?");
-			System.out.println("1콜라,2사이다");
-			pick = choice.nextInt();
-			choice.nextLine();
+			ArrayList<DrinkVO> list = null;
 			
-			if(pick == 1) {
-				System.out.println("콜라");
-				cvo.setWhatDk("콜라");
-				whatMenu();
-			} else if (pick == 2) {
-				System.out.println("사이다");
-				cvo.setWhatDk("사이다");
-				whatMenu();
-			} else {
-				System.out.println("다시 입력해주세요");
-				whatDk();
+			try {
+				conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				
+				StringBuilder sb = new StringBuilder();
+				sb.append("SELECT drinkid, drinkname, PRICE ");
+				sb.append("  FROM drink ");
+				sb.append(" ORDER BY drinkID ");
+				pstmt = conn.prepareStatement(sb.toString());
+				
+				rs = pstmt.executeQuery();
+				
+				list = new ArrayList<DrinkVO>();
+				while (rs.next()) {
+					list.add(new DrinkVO(rs.getInt("drinkid"),
+										  rs.getString("drinkname"),
+										  rs.getInt("price")));
+					
+					if (list.size() < 1) {
+						list = null;
+					}
+				}
+				for(DrinkVO bvo : list) {
+					System.out.println(bvo);
+				}				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				JDBC_Close.closeConnStmtRs(conn, pstmt, rs);
+				pickDrink();
 			}
 		}
+		//버거 아이디로 검색
+				public void pickDrink () {
+						System.out.println("무슨음료?");
+						DrinkVO dvo = null;			
+					try {			
+						conn = DriverManager.getConnection(URL, USER, PASSWORD);
+						
+						String sql = "";
+						sql += "SELECT drinkid, drinkname, PRICE ";
+						sql += "  FROM drink ";
+						sql += " WHERE drinkid = ?";
+						pstmt = conn.prepareStatement(sql);
+						
+						pick = choice.nextInt();
+		    			choice.nextLine();
+						
+						pstmt.setInt(1, pick);
+						
+						rs = pstmt.executeQuery();
+						
+						if (rs.next()) {
+							dvo = new DrinkVO(
+							rs.getInt(1)
+						   ,rs.getString(2)
+						   ,rs.getInt(3)
+							);
+							cvo.setWhatDk(dvo.getDkName());
+						} else {
+							System.out.println("데이터 없음!");
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+					} finally {
+						JDBC_Close.closeConnStmtRs(conn, pstmt, rs);
+					}  whatMenu();			
+				}
+				
 		//디저트선택시
 		public void whatDs() {
-			System.out.println("무슨디저트?");
-			System.out.println("1아이스크림,2윙");
-			pick = choice.nextInt();
-			choice.nextLine();
+			ArrayList<DessertVO> list = null;
 			
-			if(pick == 1) {
-				System.out.println("아이스크림");	
-				cvo.setWhatDs("아이스크림");
-				whatMenu();
-			} else if (pick == 2) {
-				System.out.println("윙");
-				cvo.setWhatDs("윙");
-				whatMenu();
-			} else {
-				System.out.println("다시 입력해주세요");
-				whatDs();
+			try {
+				conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				
+				StringBuilder sb = new StringBuilder();
+				sb.append("SELECT dessertid, dessertname, PRICE ");
+				sb.append("  FROM dessert ");
+				sb.append(" ORDER BY dessertid ");
+				pstmt = conn.prepareStatement(sb.toString());
+				
+				rs = pstmt.executeQuery();
+				
+				list = new ArrayList<DessertVO>();
+				while (rs.next()) {
+					list.add(new DessertVO(rs.getInt("dessertid"),
+										  rs.getString("dessertname"),
+										  rs.getInt("PRICE")));
+					
+					if (list.size() < 1) {
+						list = null;
+					}
+				}
+				for(DessertVO dvo : list) {
+					System.out.println(dvo);
+				}				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				JDBC_Close.closeConnStmtRs(conn, pstmt, rs);
+				pickDessert ();
 			}
-			//if
 		}
+		//디저트 아이디로 검색
+				public void pickDessert () {
+						System.out.println("무슨디저트?");
+						DessertVO dvs = null;			
+					try {			
+						conn = DriverManager.getConnection(URL, USER, PASSWORD);
+						
+						String sql = "";
+						sql += "SELECT dessertid, dessertname, PRICE ";
+						sql += "  FROM dessert ";
+						sql += " WHERE dessertid = ?";
+						pstmt = conn.prepareStatement(sql);
+						
+						pick = choice.nextInt();
+		    			choice.nextLine();
+						
+						pstmt.setInt(1, pick);
+						
+						rs = pstmt.executeQuery();
+						
+						if (rs.next()) {
+							dvs = new DessertVO(
+							rs.getInt(1)
+						   ,rs.getString(2)
+						   ,rs.getInt(3)
+							);
+							cvo.setWhatDs(dvs.getDsName());
+						} else {
+							System.out.println("데이터 없음!");
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+					} finally {
+						JDBC_Close.closeConnStmtRs(conn, pstmt, rs);
+					}  whatMenu();			
+				}
 		
 		//장바구니?
 		public void bag() {
@@ -241,17 +430,26 @@ public class Order {
 					bag();
 				} else if (pick==4) {
 					bag();
-				}
+				} else {
+					System.out.println("다시 선택해주세요.");
+					System.out.println("1.버거, 2.음료, 3.디저트 4.이전화면");
+					
+					pick = choice.nextInt();
+					choice.nextLine();
+					}
 			}
 			
 			if (pick==2) {
 				whatMenu();
-			}
+			} 
 			
 			if(pick==3) {
 				whereCheck();
+			} else {
+				System.out.println("다시 입력해주세요");
+				bag();
 			}
-		}
+		} 
 			
 				
 	
@@ -267,6 +465,9 @@ public class Order {
 			} else if (pick == 2) {
 				System.out.println("기계");
 				cvo.setWhereCheck("가게");
+			} else {
+				System.out.println("다시 입력해주세요");
+				whereCheck();
 			}
 			pirntBill();
 		}
@@ -275,10 +476,20 @@ public class Order {
 		public void pirntBill() {
 			System.out.println("영수증");
 			System.out.println(cvo);
+//			try {
+//				conn = DriverManager.getConnection(URL, USER, PASSWORD);
+//				StringBuffer sql = new StringBuffer();
+//				sql.append("select * from customer where id = ?");
+//				
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
 			
 			System.out.println("감사합니다.");
 			start();
 		}
+		
+		
 		
 		
 		
