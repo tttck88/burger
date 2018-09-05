@@ -1,0 +1,91 @@
+public void whatBg() {
+			ArrayList<BurgerVO> list = null;
+			
+			try {
+				conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				
+				StringBuilder sb = new StringBuilder();
+				sb.append("SELECT BURGERID, BURGERNAME, PRICE ");
+				sb.append("  FROM BURGER ");
+				sb.append(" ORDER BY BURGERID ");
+				pstmt = conn.prepareStatement(sb.toString());
+				
+				rs = pstmt.executeQuery();
+				
+				list = new ArrayList<BurgerVO>();
+				while (rs.next()) {
+					list.add(new BurgerVO(rs.getInt("burgerid"),
+										  rs.getString("burgername"),
+										  rs.getInt("price")));
+					
+					if (list.size() < 1) {
+						list = null;
+					}
+				}
+				for(BurgerVO bvo : list) {
+					System.out.println(bvo);
+				}				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				JDBC_Close.closeConnStmtRs(conn, pstmt, rs);
+				pickBurger();
+			}
+		}
+			
+		//버거 아이디로 검색
+		public void pickBurger () {
+				System.out.println("무슨버거?");
+				BurgerVO bvo = null;			
+			try {			
+				conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				
+				String sql = "";
+				sql += "SELECT BURGERID, BURGERNAME, PRICE ";
+				sql += "  FROM BURGER ";
+				sql += " WHERE BURGERID = ?";
+				pstmt = conn.prepareStatement(sql);
+				
+				pick = choice.nextInt();
+    			choice.nextLine();
+				
+				pstmt.setInt(1, pick);
+				
+				rs = pstmt.executeQuery();
+				
+				if (rs.next()) {
+					bvo = new BurgerVO(
+					rs.getInt(1)
+				   ,rs.getString(2)
+				   ,rs.getInt(3)
+					);
+					cvo.setWhatBg(bvo.getBgName());
+				} else {
+					System.out.println("데이터 없음!");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				JDBC_Close.closeConnStmtRs(conn, pstmt, rs);
+			}  whatMenu();			
+		}
+			
+			public void whatBg2() {
+			System.out.println("원하시는 구성을 선택해주세요");
+			System.out.println("1단품,2세트");
+
+			pick = choice.nextInt();
+			choice.nextLine();
+			
+			if(pick == 1) {
+				//버거 종류에 따른 세트로
+				whatMenu();
+				//장바구니에 저장
+			} else if (pick == 2) { //일반세트
+				whatDk();
+				//장바구니에 저장
+			} else {
+				System.out.println("다시 입력해주세요");
+				whatBg2();
+			} 
+		}
