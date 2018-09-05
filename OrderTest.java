@@ -6,6 +6,11 @@ public class OrderTest {
 		Order order = new Order();
 		
 		order.start();
+		//order.start();
+		
+		CustomerVO vo = new CustomerVO();
+		//System.out.println(vo);
+		
 
 	}
 

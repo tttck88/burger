@@ -5,15 +5,16 @@ import java.util.ArrayList;
 public class CustomerVO {
 	
 	ArrayList<String> bgList = new ArrayList();
-	ArrayList<String> dKList = new ArrayList();
-	ArrayList<String> dSList = new ArrayList();
+	ArrayList<String> dkList = new ArrayList();
+	ArrayList<String> dsList = new ArrayList();
+	ArrayList<String> setList = new ArrayList();
 	
 	private String whereEat;
 	private String whatMenu;
 	private ArrayList whatBg;
 	private ArrayList whatDk;
 	private ArrayList whatDs;
-	private String whatSet;
+	private ArrayList whatSet;
 	private String whereCheck;
 	
 	public String getWhereEat() {
@@ -29,28 +30,28 @@ public class CustomerVO {
 		this.whatMenu = whatMenu;
 	}
 	public ArrayList getWhatBg() {
-		return whatBg;
+		return bgList;
 	}
 	public void setWhatBg(String whatBg) {
 		bgList.add(whatBg);
 	}
 	public ArrayList getWhatDk() {
-		return whatDk;
+		return dkList;
 	}
 	public void setWhatDk(String whatDk) {
-		dKList.add(whatDk);
+		dkList.add(whatDk);
 	}
 	public ArrayList getWhatDs() {
-		return whatDs;
+		return dsList;
 	}
 	public void setWhatDs(String whatDs) {
-		dSList.add(whatDs);
+		dsList.add(whatDs);
 	}
-	public String getWhatSet() {
-		return whatSet;
+	public ArrayList getWhatSet() {
+		return setList;
 	}
 	public void setWhatSet(String whatSet) {
-		this.whatSet = whatSet;
+		setList.add(whatSet);
 	}
 	public String getWhereCheck() {
 		return whereCheck;
@@ -60,9 +61,13 @@ public class CustomerVO {
 	}
 	@Override
 	public String toString() {
-		return "CustomerVO [bgList=" + bgList + ", dKList=" + dKList + ", dSList=" + dSList + "whatSet=" + whatSet +", whereEat=" + whereEat
-				+ ", whereCheck=" + whereCheck + "]";
+		return "CustomerVO [bgList=" + bgList + ", dkList=" + dkList + ", dsList=" + dsList + ", setList=" + setList
+				+ ", whereEat=" + whereEat + ", whatBg=" + whatBg + ", whatDk=" + whatDk + ", whatDs=" + whatDs
+				+ ", whatSet=" + whatSet + ", whereCheck=" + whereCheck + "]";
 	}
+	
+	
+	
 
 	
 	
