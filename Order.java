@@ -21,6 +21,13 @@ public class Order {
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 	
+	BurgerVO bvo = null;	
+	DrinkVO dvo = null;	
+	DessertVO dvs = null;			
+
+
+
+	
 	//static 초기화 구문
 	static {
 		try {
@@ -148,7 +155,6 @@ public class Order {
 		//버거 아이디로 검색
 		public void pickBurger () {
 				System.out.println("무슨버거?");
-				BurgerVO bvo = null;			
 			try {			
 				conn = DriverManager.getConnection(URL, USER, PASSWORD);
 				
@@ -260,7 +266,6 @@ public class Order {
 		//버거 아이디로 검색
 				public void pickDrink () {
 						System.out.println("무슨음료?");
-						DrinkVO dvo = null;			
 					try {			
 						conn = DriverManager.getConnection(URL, USER, PASSWORD);
 						
@@ -296,7 +301,7 @@ public class Order {
 				
 		//디저트선택시
 		public void whatDs() {
-			ArrayList<DessertVO> list = null;
+			ArrayList<DessertVO> list = null; 
 			
 			try {
 				conn = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -332,7 +337,6 @@ public class Order {
 		//디저트 아이디로 검색
 				public void pickDessert () {
 						System.out.println("무슨디저트?");
-						DessertVO dvs = null;			
 					try {			
 						conn = DriverManager.getConnection(URL, USER, PASSWORD);
 						
@@ -474,17 +478,82 @@ public class Order {
 
 		
 		public void pirntBill() {
+			int sum = 0;
+			
 			System.out.println("영수증");
 			System.out.println(cvo);
-//			try {
-//				conn = DriverManager.getConnection(URL, USER, PASSWORD);
-//				StringBuffer sql = new StringBuffer();
-//				sql.append("select * from customer where id = ?");
-//				
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
 			
+			try {
+				conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				StringBuffer sql = new StringBuffer();
+				
+				
+				sql.append("select price from burger where burgername = ?");
+				System.out.println(sum);
+				for (int i=1; i<=cvo.bgList.size(); i++) {
+				
+					pstmt=conn.prepareStatement(sql.toString());
+					
+					pstmt.setString(1, cvo.bgList.get(i-1));
+					rs = pstmt.executeQuery();
+					while(rs.next()) {
+						sum += rs.getInt(1);						
+					}				
+				System.out.println(sum);
+				}	
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				StringBuffer sql = new StringBuffer();
+				
+				
+				sql.append("select price from drink where drinkname = ?");
+				System.out.println(sum);
+				for (int i=1; i<=cvo.dkList.size(); i++) {
+				
+					pstmt=conn.prepareStatement(sql.toString());
+					
+					pstmt.setString(1, cvo.dkList.get(i-1));
+					rs = pstmt.executeQuery();
+					while(rs.next()) {
+						sum += rs.getInt(1);						
+					}				
+				System.out.println(sum);
+				}	
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				StringBuffer sql = new StringBuffer();
+				
+				
+				sql.append("select price from dessert where dessertname = ?");
+				System.out.println(sum);
+				for (int i=1; i<=cvo.dsList.size(); i++) {
+				
+					pstmt=conn.prepareStatement(sql.toString());
+					
+					pstmt.setString(1, cvo.dsList.get(i-1));
+					rs = pstmt.executeQuery();
+					while(rs.next()) {
+						sum += rs.getInt(1);						
+					}				
+				System.out.println(sum);
+				}	
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			
+			
+			
+//					cvo.bgList.get(0);
+//			System.out.println(bvo.getBgPrice());
 			System.out.println("감사합니다.");
 			start();
 		}
