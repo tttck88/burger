@@ -1,0 +1,33 @@
+public void cancel(String burgerid) {
+			try {
+				conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				
+				StringBuilder sb = new StringBuilder();
+				sb.append("update orders set burgerid = ? where burgerid = ? and custid = ? and list = ?");
+												
+				pstmt = conn.prepareStatement(sb.toString());
+				
+				System.out.println("수량을 선택해주십시오.");
+				
+				Scanner choice = new Scanner(System.in);
+				int j = choice.nextInt();
+				choice.nextLine();
+				
+				for(int i=1; i<=j; i++) {
+					
+				pstmt.setInt(1, 0);							
+				pstmt.setInt(2, 22);							
+				pstmt.setString(3, "1"); //custid =3						
+				pstmt.setInt(4, i);									
+				
+				
+				
+				int result = pstmt.executeUpdate();
+				}
+				System.out.println(11212);
+		
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
